@@ -12,17 +12,28 @@ import {
   initializeStore
 } from '../lib/commands/index.js';
 import { checkConfig } from '../lib/utils/config.js';
+import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: join(__dirname, '../.env') });
 
-// Ensure config is initialized
-await checkConfig();
+// Read package.json for version
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'));
 
 program
-  .name('pv')
+  .name('prompthub')
   .description('Git-style version control for AI prompts')
-  .version('1.0.0');
+  .version(packageJson.version);
+
+// Only check config for commands that need it
+const commandsNeedingConfig = ['save'];
+
+program
+  .hook('preAction', async (thisCommand) => {
+    if (commandsNeedingConfig.includes(thisCommand.name())) {
+      await checkConfig();
+    }
+  });
 
 program
   .command('init')
