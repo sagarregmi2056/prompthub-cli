@@ -7,7 +7,7 @@
     "prompthub": "./bin/cli.js"
   },
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --passWithNoTests",
     "lint": "eslint .",
     "format": "prettier --write .",
     "start": "node bin/cli.js",
@@ -60,8 +60,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
+    "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/preset-env": "^7.24.0",
     "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "prettier": "^3.2.5"

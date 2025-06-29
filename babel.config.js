@@ -5,5 +5,8 @@ export default {
         node: 'current'
       }
     }]
+  ],
+  plugins: [
+    ['@babel/plugin-syntax-import-meta']
   ]
 }; 

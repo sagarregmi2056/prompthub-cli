@@ -1,7 +1,9 @@
 /** @type {import('jest').Config} */
 export default {
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.js$': ['babel-jest', { 
+      configFile: './babel.config.js'
+    }]
   },
   testEnvironment: 'node',
   moduleNameMapper: {
@@ -15,5 +17,6 @@ export default {
   testPathIgnorePatterns: ['/node_modules/'],
   transformIgnorePatterns: [
     'node_modules/(?!(chalk|commander|inquirer|ora|table)/)'
-  ]
-}; 
+  ],
+  moduleFileExtensions: ['js', 'json', 'node']
+};
