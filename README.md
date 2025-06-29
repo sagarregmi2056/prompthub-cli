@@ -408,7 +408,7 @@ set DEBUG=prompthub* && prompthub save -p "Your prompt"
 
 ### Version History
 
-- v1.0.0 (2024-02)
+- v1.0.7 (2025-06)
   - Initial release
   - Support for OpenAI, LLaMA, and Anthropic models
   - Basic prompt version control features
