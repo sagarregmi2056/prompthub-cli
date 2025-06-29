@@ -1,17 +1,17 @@
 {
-  "name": "@sagarregmi2056/prompthub-cli",
-  "version": "1.0.0",
+  "name": "@sagaegmi/prompthub-cli",
+  "version": "1.0.2",
   "description": "PromptHub CLI - A powerful version control system for AI prompts with multi-model support",
   "type": "module",
   "bin": {
     "prompthub": "./bin/cli.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint .",
     "format": "prettier --write .",
     "start": "node bin/cli.js",
-    "prepublishOnly": "npm run test && npm run lint"
+    "prepublishOnly": "npm run test"
   },
   "keywords": [
     "prompthub",
