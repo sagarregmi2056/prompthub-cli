@@ -1,6 +1,6 @@
 # PromptHub CLI
 
-A powerful version control system for AI prompts, allowing you to track, compare, and manage your prompt engineering history. Uses a simple file-based storage system - no database required!
+A powerful version control system for AI prompts, allowing you to track, compare, and manage your prompt engineering history. Uses a simple file-based storage system with optional remote storage for team collaboration.
 
 ## Features
 
@@ -10,9 +10,15 @@ A powerful version control system for AI prompts, allowing you to track, compare
 - 🏷️ Tag and categorize prompts
 - 📊 Track prompt performance and responses
 - 🔙 Rollback to previous versions
-- 💾 Simple file-based storage (no database required)
+- 🌳 Track prompt lineage and variants
+- 🔔 Detect outdated prompt variants
+- 🤝 Team collaboration with remote storage
+- 🧪 Built-in A/B testing
+- 🔀 Branch-based workflow
+- 🚀 CI/CD integration support
+- 💾 Local or remote storage options
 - 📤 Human-readable JSON storage format
-- 🤖 Support for multiple AI providers (OpenAI, LLaMA, Anthropic)
+- 🤖 Support for multiple AI providers
 
 ## Storage Structure
 
@@ -34,9 +40,32 @@ A powerful version control system for AI prompts, allowing you to track, compare
   "response": "Quantum computing is...",
   "model": "gpt-4",
   "created_at": "2024-02-20T12:34:56.789Z",
+  "parent_id": null,
+  "branch": "main",
   "metadata": {
     "executed": true,
-    "source": "cli"
+    "source": "cli",
+    "metrics": {
+      "tokens": 150,
+      "latency": 2500,
+      "cost": 0.03
+    },
+    "test_results": [
+      {
+        "timestamp": "2024-02-20T12:35:00Z",
+        "comparison_id": "test123",
+        "metrics": {
+          "accuracy": 0.95,
+          "latency": 2500,
+          "tokens": 150
+        }
+      }
+    ],
+    "ci": {
+      "pipeline": "prompt-validation",
+      "run_id": "ci123",
+      "status": "passed"
+    }
   }
 }
 ```
@@ -46,7 +75,8 @@ A powerful version control system for AI prompts, allowing you to track, compare
 {
   "quantum": ["abc123", "def456"],
   "physics": ["abc123"],
-  "ai": ["ghi789"]
+  "ai": ["ghi789"],
+  "variant": ["def456"]
 }
 ```
 
@@ -113,76 +143,67 @@ npm run format
 
 ### Required Environment Variables
 
-The CLI requires an OpenAI API key to function. When you first run any command, if no `.env` file is found, a template will be created automatically. You'll need to edit this file and add your API key:
+The CLI requires configuration for basic operation and remote storage. When you first run any command, if no `.env` file is found, a template will be created automatically:
 
 ```env
-# Required
-OPENAI_API_KEY=your_openai_api_key_here
+# Required for prompt execution
+OPENAI_API_KEY=your_api_key_here
 
-# Optional
+# Optional: Remote storage configuration
+# S3 Storage
+S3_BUCKET=your-bucket-name
+S3_REGION=your-region
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+
+# GitHub Storage
+GITHUB_TOKEN=your-github-token
+GITHUB_REPO=owner/repo
+
+# REST API Storage
+REST_API_URL=https://your-api.com
+REST_API_KEY=your-api-key
+
+# Model Configuration
 MODEL=gpt-4  # Default model to use
 MAX_TOKENS=2000  # Maximum tokens for responses
 ```
 
-To get an OpenAI API key:
-1. Go to https://platform.openai.com/api-keys
-2. Sign in or create an account
-3. Create a new API key
-4. Copy the key and paste it in your `.env` file
+### Remote Storage Setup
 
-### Configuration Files
+PromptHub supports three types of remote storage:
 
-The CLI uses two main configuration files:
+1. **S3 Storage**
+```bash
+# Configure S3
+prompthub remote s3 --bucket my-prompts --region us-east-1
 
-1. `.env` - Environment variables (API keys, model settings)
-2. `.prompthub/config.yml` - CLI configuration (created automatically)
-
-The first time you run any command:
-- If no `.env` file exists, a template will be created
-- A `.prompthub` directory will be created containing:
-  - `config.yml` - Configuration settings
-  - `prompts/` - Directory for storing prompts
-  - `tags.json` - Tag management file
-
-### Model Provider Setup
-
-1. Choose your model provider in `.env`:
-```env
-# Set your preferred provider (OPENAI, LLAMA, ANTHROPIC)
-MODEL_PROVIDER=OPENAI
-
-# Configure provider-specific settings
-# For OpenAI:
-OPENAI_API_KEY=your_openai_api_key_here
-MODEL=gpt-4  # Optional
-
-# For LLaMA:
-# MODEL_PROVIDER=LLAMA
-# LLAMA_API_URL=your_llama_api_url_here
-# LLAMA_API_KEY=your_llama_api_key_here
-# MODEL=llama-2-7b
-
-# For Anthropic:
-# MODEL_PROVIDER=ANTHROPIC
-# ANTHROPIC_API_KEY=your_anthropic_api_key_here
-# MODEL=claude-3-opus
+# Required environment variables:
+# - S3_BUCKET
+# - S3_REGION
+# - AWS_ACCESS_KEY_ID
+# - AWS_SECRET_ACCESS_KEY
 ```
 
-2. Provider-Specific Setup:
+2. **GitHub Storage**
+```bash
+# Configure GitHub
+prompthub remote github --repo owner/repo
 
-#### OpenAI
-1. Get API key from https://platform.openai.com/api-keys
-2. Set OPENAI_API_KEY in .env
+# Required environment variables:
+# - GITHUB_TOKEN
+# - GITHUB_REPO
+```
 
-#### LLaMA
-1. Set up a LLaMA API endpoint (self-hosted or service)
-2. Configure LLAMA_API_URL and LLAMA_API_KEY
-3. Optional: Choose model variant in MODEL
+3. **REST API Storage**
+```bash
+# Configure REST API
+prompthub remote rest --url https://api.example.com
 
-#### Anthropic
-1. Get API key from Anthropic
-2. Set ANTHROPIC_API_KEY in .env
-3. Optional: Choose Claude model in MODEL
+# Required environment variables:
+# - REST_API_URL
+# - REST_API_KEY
+```
 
 ## Usage
 
@@ -192,23 +213,90 @@ MODEL=gpt-4  # Optional
 prompthub init
 ```
 
+### Branch Management
+
+```bash
+# Create a new branch
+prompthub branch feature/tone --create
+
+# Switch to a branch
+prompthub branch feature/tone
+
+# List prompts in a branch
+prompthub list -b feature/tone
+```
+
 ### Save a Prompt
 
 ```bash
 # Save a prompt directly
 prompthub save -p "Explain quantum computing" -t quantum physics
 
+# Save to a specific branch
+prompthub save -p "Your prompt" -b feature/tone
+
 # Save a prompt from a file
 prompthub save -f ./prompt.txt --tags ai research
 
 # Save without executing
 prompthub save -p "Your prompt" --no-execute
+
+# Save without checking for outdated prompts
+prompthub save -p "Your prompt" --skip-outdated-check
 ```
 
-### List Prompts
+### Create Prompt Variants
 
 ```bash
-# List recent prompts
+# Fork a prompt with new text
+prompthub fork abc123 -p "Explain quantum computing with more examples"
+
+# Fork using parent's prompt text
+prompthub fork abc123
+
+# Fork with additional tags
+prompthub fork abc123 -t advanced examples
+
+# Fork from file
+prompthub fork abc123 -f ./variant.txt
+```
+
+### A/B Testing
+
+```bash
+# Simple A/B test
+prompthub test abc123 def456
+
+# Run multiple samples
+prompthub test abc123 def456 -n 10
+
+# Test with specific model
+prompthub test abc123 def456 --model gpt-4
+
+# Export results to CSV
+prompthub test abc123 def456 -n 5 -o results.csv
+```
+
+The CSV output includes:
+- Prompt IDs and text
+- Average token usage
+- Average latency
+- Sample responses
+
+### Track Prompt Lineage
+
+```bash
+# Show full ancestry tree of a prompt
+prompthub lineage abc123
+
+# Check for outdated prompts
+prompthub check-outdated
+```
+
+### List and Search
+
+```bash
+# List prompts in current branch
 prompthub list
 
 # List with limit
@@ -217,42 +305,110 @@ prompthub list -n 20
 # List prompts with specific tag
 prompthub list -t research
 
+# List prompts in specific branch
+prompthub list -b feature/tone
+
+# Search in specific branch
+prompthub search "quantum" -b feature/tone
+
 # Output in JSON format
 prompthub list --format json
 ```
 
-### Search Prompts
-
-```bash
-# Search in prompts
-prompthub search "quantum"
-
-# Search in specific field
-prompthub search "error" --in response
-
-# Search by tag
-prompthub search "ai" --in tags
-```
-
-### Compare Versions
+### Compare and Restore
 
 ```bash
 # Show diff between two versions
 prompthub diff abc123 def456
 
-# Show diff without color
-prompthub diff abc123 def456 --no-color
+# Restore to specific branch
+prompthub restore abc123 -b feature/tone
 ```
 
-### Restore Version
+## Team Collaboration Workflow
 
+1. **Set Up Remote Storage**
 ```bash
-# Restore a previous version
-prompthub restore abc123 -o prompt.txt
-
-# View a previous version without restoring
-prompthub restore abc123
+# Team lead configures remote storage
+prompthub remote s3 --bucket team-prompts --region us-east-1
 ```
+
+2. **Create Feature Branch**
+```bash
+# Create branch for new feature
+prompthub branch feature/tone-improvement --create
+```
+
+3. **Work on Prompts**
+```bash
+# Save prompts to branch
+prompthub save -p "New tone prompt" -b feature/tone-improvement
+
+# Test variations
+prompthub fork abc123 -p "Alternative tone" -b feature/tone-improvement
+prompthub test def456 ghi789 -n 5 -o tone-test.csv
+```
+
+4. **Review Changes**
+```bash
+# Check for outdated prompts
+prompthub check-outdated
+
+# Review lineage
+prompthub lineage abc123
+```
+
+## CI/CD Integration
+
+PromptHub CLI can be integrated into your CI/CD pipeline:
+
+```yaml
+# Example GitHub Actions workflow
+name: Prompt Validation
+on: [push]
+
+jobs:
+  validate-prompts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install PromptHub CLI
+        run: npm install -g @sagarregmi2056/prompthub-cli
+      
+      - name: Run A/B Tests
+        run: |
+          prompthub test ${{ github.event.inputs.prompt1 }} ${{ github.event.inputs.prompt2 }} -n 5 -o test-results.csv
+      
+      - name: Check Outdated Prompts
+        run: prompthub check-outdated
+```
+
+## Best Practices
+
+1. **Branch Management**
+   - Use branches for experimental prompt variations
+   - Keep main branch for production-ready prompts
+   - Test variations before merging
+
+2. **A/B Testing**
+   - Run multiple samples for statistical significance
+   - Export results to CSV for analysis
+   - Test with the same model you'll use in production
+
+3. **Remote Storage**
+   - Use S3 for large teams and high availability
+   - Use GitHub for version control integration
+   - Use REST API for custom backend integration
+
+4. **Prompt Lineage**
+   - Fork prompts for significant variations
+   - Keep track of parent-child relationships
+   - Regularly check for outdated variants
+
+5. **CI/CD Integration**
+   - Automate prompt testing
+   - Validate prompts before deployment
+   - Track metrics over time
 
 ## Command Reference
 

@@ -1,7 +1,7 @@
 {
   "name": "@sagaegmi/prompthub-cli",
-  "version": "1.0.7",
-  "description": "PromptHub CLI - A powerful version control system for AI prompts with multi-model support",
+  "version": "1.1.0",
+  "description": "PromptHub CLI - A powerful version control system for AI prompts with team collaboration features",
   "type": "module",
   "bin": {
     "prompthub": "./bin/cli.js"
@@ -24,7 +24,11 @@
     "anthropic",
     "cli",
     "prompts",
-    "prompt-management"
+    "prompt-management",
+    "collaboration",
+    "ab-testing",
+    "ci-cd",
+    "remote-storage"
   ],
   "author": "Sagar Regmi <sagarregmi2056@gmail.com>",
   "license": "MIT",
@@ -48,7 +52,11 @@
     "openai": "^4.28.0",
     "ora": "^8.0.1",
     "table": "^6.8.1",
-    "yaml": "^2.4.0"
+    "yaml": "^2.4.0",
+    "@aws-sdk/client-s3": "^3.525.0",
+    "@octokit/rest": "^20.0.2",
+    "csv-writer": "^1.6.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
