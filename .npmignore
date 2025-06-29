@@ -1,0 +1,43 @@
+# Development files
+.git
+.gitignore
+.eslintrc*
+.prettierrc*
+.env
+.env.*
+.vscode/
+.idea/
+
+# Test files
+test/
+__tests__/
+*.test.js
+*.spec.js
+coverage/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Build files
+dist/
+build/
+*.log
+npm-debug.log*
+
+# Example files
+examples/
+demo/
+
+# Development configurations
+.editorconfig
+.travis.yml
+.circleci/
+.github/
+
+# Temporary files
+.tmp/
+.temp/
+*.swp
+.DS_Store 

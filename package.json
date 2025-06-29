@@ -1,0 +1,59 @@
+{
+  "name": "@sagarregmi2056/prompthub-cli",
+  "version": "1.0.0",
+  "description": "PromptHub CLI - A powerful version control system for AI prompts with multi-model support",
+  "type": "module",
+  "bin": {
+    "prompthub": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "start": "node bin/cli.js",
+    "prepublishOnly": "npm run test && npm run lint"
+  },
+  "keywords": [
+    "prompthub",
+    "prompt-engineering",
+    "version-control",
+    "ai",
+    "llm",
+    "openai",
+    "llama",
+    "anthropic",
+    "cli",
+    "prompts",
+    "prompt-management"
+  ],
+  "author": "Sagar Regmi <sagarregmi2056@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sagarregmi2056/prompthub-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sagarregmi2056/prompthub-cli/issues"
+  },
+  "homepage": "https://github.com/sagarregmi2056/prompthub-cli#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "diff": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "inquirer": "^9.2.15",
+    "openai": "^4.28.0",
+    "ora": "^8.0.1",
+    "table": "^6.8.1",
+    "yaml": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5"
+  }
+}
