@@ -2,6 +2,23 @@
 
 A powerful version control system for AI prompts, allowing you to track, compare, and manage your prompt engineering history. Uses a simple file-based storage system with optional remote storage for team collaboration.
 
+## Requirements
+
+- Node.js >= 18.0.0
+- npm >= 9.0.0 (usually comes with Node.js)
+- Git (for version tracking)
+
+## Technical Stack
+
+- **Runtime**: Node.js 18+ with ESM support
+- **Testing**: Jest 29 with ES modules
+- **Key Dependencies**:
+  - OpenAI SDK v4
+  - AWS SDK v3 (for S3 storage)
+  - Commander.js v12 (CLI framework)
+  - Inquirer v9 (Interactive prompts)
+  - dotenv v16 (Environment management)
+
 ## Features
 
 - 📝 Save and version control your prompts
@@ -103,9 +120,15 @@ The CLI supports multiple AI model providers:
 
 ### For Users
 
+Make sure you have Node.js 18 or later installed:
+```bash
+node --version  # Should be >= 18.0.0
+```
+
+Then install the CLI globally:
 ```bash
 # Install globally from npm
-npm install -g @sagarregmi2056/prompthub-cli
+npm install -g @sagaegmi/prompthub-cli
 
 # Or install from source
 git clone https://github.com/sagarregmi2056/prompthub-cli.git
@@ -113,6 +136,25 @@ cd prompthub-cli
 npm install
 npm link
 ```
+
+### Troubleshooting Installation
+
+If you encounter any issues during installation:
+
+1. Ensure you're using Node.js 18 or later:
+   ```bash
+   node --version
+   ```
+
+2. If using an older version, update Node.js:
+   - Windows: Download from [nodejs.org](https://nodejs.org/)
+   - Mac: `brew upgrade node`
+   - Linux: Use [Node Version Manager](https://github.com/nvm-sh/nvm)
+
+3. Clear npm cache if needed:
+   ```bash
+   npm cache clean --force
+   ```
 
 ### For Developers
 
