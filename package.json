@@ -1,6 +1,6 @@
 {
   "name": "@sagaegmi/prompthub-cli",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "PromptHub CLI - A powerful version control system for AI prompts with team collaboration features",
   "type": "module",
   "bin": {
