@@ -2,12 +2,12 @@
 export default {
   transform: {
     '^.+\\.js$': ['babel-jest', { 
-      configFile: './babel.config.js'
-    }]
+      configFile: './babel.config.js',
+    }],
   },
   testEnvironment: 'node',
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   verbose: true,
   collectCoverage: true,
@@ -16,7 +16,7 @@ export default {
   testMatch: ['**/test/**/*.test.js'],
   testPathIgnorePatterns: ['/node_modules/', '/lib/commands/'],
   transformIgnorePatterns: [
-    'node_modules/(?!(chalk|commander|inquirer|ora|table)/)'
+    'node_modules/(?!(chalk|commander|inquirer|ora|table)/)',
   ],
-  moduleFileExtensions: ['js', 'json', 'node']
+  moduleFileExtensions: ['js', 'json', 'node'],
 };

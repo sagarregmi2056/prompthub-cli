@@ -13,9 +13,9 @@ import {
   forkPrompt,
   showLineage,
   checkOutdated,
-  testPrompts
+  testPrompts,
 } from '../lib/commands/index.js';
-import { checkConfig } from '../lib/utils/config.js';
+import { checkConfig, ConfigManager } from '../lib/utils/config.js';
 import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -48,12 +48,12 @@ program
   .command('remote')
   .description('Configure remote storage')
   .argument('<type>', 'Remote storage type (s3, github, rest)')
-  .option('--bucket <name>', 'S3 bucket name')
+  .option('--bucket <n>', 'S3 bucket name')
   .option('--region <region>', 'S3 region')
   .option('--repo <owner/repo>', 'GitHub repository')
   .option('--url <url>', 'REST API URL')
   .action(async (type, options) => {
-    const configManager = new Config();
+    const configManager = new ConfigManager();
     await configManager.load();
     await configManager.setRemote(type, options);
     console.log(`Remote storage configured: ${type}`);
@@ -62,9 +62,9 @@ program
 program
   .command('branch')
   .description('Create or switch branches')
-  .argument('<name>', 'Branch name')
+  .argument('<n>', 'Branch name')
   .option('--create', 'Create a new branch')
-  .action(async (name, options) => {
+  .action(async (_name, _options) => {
     // TODO: Implement branch management
     console.log('Branch management coming soon!');
   });

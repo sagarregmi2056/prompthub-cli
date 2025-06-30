@@ -2,11 +2,11 @@ export default {
   presets: [
     ['@babel/preset-env', {
       targets: {
-        node: 'current'
-      }
-    }]
+        node: 'current',
+      },
+    }],
   ],
   plugins: [
-    ['@babel/plugin-syntax-import-meta']
-  ]
+    ['@babel/plugin-syntax-import-meta'],
+  ],
 }; 
