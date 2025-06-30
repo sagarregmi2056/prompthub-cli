@@ -13,8 +13,8 @@ export default {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
-  testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
-  testPathIgnorePatterns: ['/node_modules/'],
+  testMatch: ['**/test/**/*.test.js'],
+  testPathIgnorePatterns: ['/node_modules/', '/lib/commands/'],
   transformIgnorePatterns: [
     'node_modules/(?!(chalk|commander|inquirer|ora|table)/)'
   ],
